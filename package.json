@@ -1,0 +1,25 @@
+{
+  "name": "typescript-utils",
+  "version": "1.0.0",
+  "description": "Common coding needs written in typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nataliebasille/typescript-utils.git"
+  },
+  "author": "Natalie Basille",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nataliebasille/typescript-utils/issues"
+  },
+  "homepage": "https://github.com/nataliebasille/typescript-utils#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@typescript-eslint/parser": "^5.49.0",
+    "eslint": "^8.33.0",
+    "typescript": "^4.9.4"
+  }
+}
