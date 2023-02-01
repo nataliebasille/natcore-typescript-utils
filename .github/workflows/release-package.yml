@@ -1,6 +1,21 @@
 name: Node.js Package
 
 on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "bump type, major or minor or patch or empty string"
+        default: ""
+      dry_run:
+        description: "dry run, true or false"
+        default: "false"
+      draft:
+        description: "draft, true or false"
+        default: "false"
+      pre_release:
+        description: "pre release, true or false"
+        default: "false"
+
   release:
     types: [created]
 
@@ -28,6 +43,13 @@ jobs:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
       - run: npm ci
-      - run: npm publish
+      - uses: MeilCli/bump-release-action@master
+        with:
+          config_path: ".github/bump.yml"
+          bump: ${{ github.event.inputs.bump }}
+          dry_run: ${{ github.event.inputs.dry_run }}
+          draft: ${{ github.event.inputs.draft }}
+          pre_release: ${{ github.event.inputs.pre_release }}
+
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
