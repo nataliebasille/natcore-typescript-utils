@@ -1,33 +1,41 @@
 name: Node.js Package
 
 on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "bump type, major or minor or patch or empty string"
+        default: ""
+      dry_run:
+        description: "dry run, true or false"
+        default: "false"
+      draft:
+        description: "draft, true or false"
+        default: "false"
+      pre_release:
+        description: "pre release, true or false"
+        default: "false"
+
   release:
     types: [created]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
-
   publish-gpr:
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
         with:
-          node-version: 16
-          registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish
+          fetch-depth: 0
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm install
+      - run: npm run test
+      - uses: MeilCli/bump-release-action@v1
+        config_path: ".github/bump.yml"
+
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
