@@ -33,6 +33,7 @@ jobs:
       - uses: MeilCli/bump-release-action@v1
         with:
           config_path: ".github/bump.yml"
+          github_token: ${{secrets.GITHUB_TOKEN}}
 
   publish-gpr:
     needs: prep-release
