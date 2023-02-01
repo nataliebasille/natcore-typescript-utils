@@ -21,6 +21,8 @@ on:
 jobs:
   prep-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,10 +32,10 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npm test
-      - uses: MeilCli/bump-release-action@v1
+      - uses: MeilCli/bump-release-action@v1.5.0
         with:
           config_path: ".github/bump.yml"
-          github_token: ${{secrets.WORKFLOW_TOKEN}}
+          github_token: ${{secrets.GITHUB_TOKEN}}
 
   publish-gpr:
     needs: prep-release
