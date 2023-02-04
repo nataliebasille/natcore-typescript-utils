@@ -5,7 +5,7 @@ on:
     branches: main
 
 jobs:
-  prep-release:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -24,7 +24,7 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
 
   merge-back-to-develop:
-    needs: publish-npm
+    needs: release
     runs-on: ubuntu-latest
     permissions:
       contents: write
