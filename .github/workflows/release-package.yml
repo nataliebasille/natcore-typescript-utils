@@ -23,7 +23,7 @@ jobs:
           config_path: ".github/bump.yml"
           github_token: ${{secrets.GITHUB_TOKEN}}
 
-  publish-gpr:
+  publish-npm:
     needs: prep-release
     runs-on: ubuntu-latest
     permissions:
@@ -41,3 +41,20 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  merge-back-to-develop:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: "main"
+      - name: Merge back to develop
+        run: |
+          git fetch --unshallow
+          git checkout develop
+          git pull
+          git merge main
+          git push
