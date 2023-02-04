@@ -1,28 +1,39 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  pull_request:
+  push:
+    branches: main
 
 jobs:
-  build:
+  prep-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: "main"
       - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: npm ci
       - run: npm test
+      - uses: MeilCli/bump-release-action@v1.5.0
+        with:
+          config_path: ".github/bump.yml"
+          github_token: ${{secrets.GITHUB_TOKEN}}
 
   publish-gpr:
-    needs: build
+    needs: prep-release
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: "main"
       - uses: actions/setup-node@v3
         with:
           node-version: 16
