@@ -35,6 +35,7 @@ jobs:
         uses: "phips28/gh-action-bump-version@v9.1.0"
         with:
           tag-prefix: "v"
+          target-branch: "main"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
