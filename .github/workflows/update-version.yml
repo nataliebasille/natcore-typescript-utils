@@ -26,7 +26,7 @@ jobs:
       contents: write
     steps:
       - name: "Checkout source code"
-        uses: "actions/checkout@v3d"
+        uses: "actions/checkout@v3"
         with:
           ref: "main"
       - name: "Automated Version Bump"
