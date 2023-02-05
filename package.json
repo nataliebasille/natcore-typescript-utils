@@ -1,6 +1,6 @@
 {
   "name": "@nataliebasille/typescript-utils",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Common coding needs written in typescript",
   "main": "index.js",
   "scripts": {
