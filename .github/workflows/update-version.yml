@@ -35,20 +35,3 @@ jobs:
           tag-prefix: "v"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  merge-back-to-develop:
-    needs: update-version
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: "main"
-      - name: Merge back to develop
-        run: |
-          git fetch --unshallow
-          git checkout develop
-          git pull
-          git merge main
-          git push
