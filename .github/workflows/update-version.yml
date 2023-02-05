@@ -35,3 +35,18 @@ jobs:
           tag-prefix: "v"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: update-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v3.6.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v0.1.15
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
