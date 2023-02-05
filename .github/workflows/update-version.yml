@@ -30,8 +30,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  update-version:
-    needs: release
+  merge-back-to-develop:
+    needs: update-version
     runs-on: ubuntu-latest
     permissions:
       contents: write
