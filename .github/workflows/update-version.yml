@@ -26,11 +26,13 @@ jobs:
       contents: write
     steps:
       - name: "Checkout source code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
         with:
           ref: "main"
       - name: "Automated Version Bump"
         uses: "phips28/gh-action-bump-version@v9.1.0"
+        with:
+          tag-prefix: "v"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
