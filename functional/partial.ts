@@ -12,6 +12,13 @@ type RemovePartialParameters<
   TPartialArgs extends PartialParameters<TFn>
 > = CullTuple<Parameters<TFn>, TPartialArgs>;
 
+/**
+ * Partially applies arguments to a function from the left.
+ *
+ * @param fn - The function to partially apply arguments to.
+ * @param args - The arguments to partially apply.
+ * @returns A function that takes the remaining arguments and returns the result of calling fn with the partially applied arguments.
+ */
 export const partial = <
   TFn extends (...args: any[]) => any,
   TPartialArgs extends PartialParameters<TFn>

@@ -1,5 +1,11 @@
 import { RandomNumberGenerator } from "./types";
 
+/**
+ * Returns a random index based on the weights provided.
+ * @param rng A random number generator.
+ * @param weights An array of weights.
+ * @returns A random index based on the weights provided.
+ */
 export function weighted(
   rng: RandomNumberGenerator,
   weights: number[]
