@@ -1,0 +1,48 @@
+name: Node.js Package
+
+on:
+  pull_request:
+    branches: main
+
+jobs:
+  validate-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: "main"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm test
+
+  update-version:
+    needs: validate-tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@v9.1.0"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-version:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: "main"
+      - name: Merge back to develop
+        run: |
+          git fetch --unshallow
+          git checkout develop
+          git pull
+          git merge main
+          git push
