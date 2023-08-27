@@ -38,11 +38,18 @@ export const error = <E>(value: E): Error<E> => ({
   value,
 });
 
-export const isOk = <E, S>(result: Result<S, E>): result is Ok<S> =>
+export const isOk = <S, E>(result: Result<S, E>): result is Ok<S> =>
   result.type === 'ok';
 
-export const isError = <E, S>(result: Result<S, E>): result is Error<E> =>
+export const isError = <S, E>(result: Result<S, E>): result is Error<E> =>
   result.type === 'error';
+
+export const isResult = (value: unknown): value is Result<any, any> =>
+  typeof value === 'object' &&
+  value !== null &&
+  'type' in value &&
+  'value' in value &&
+  (value.type === 'ok' || value.type === 'error');
 
 export function map<S, N>(
   fn: (value: S) => N
