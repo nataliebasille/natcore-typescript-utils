@@ -1,6 +1,6 @@
 {
   "name": "@natcore/typescript-utils",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Common coding needs written in typescript",
   "main": "index.js",
   "scripts": {
