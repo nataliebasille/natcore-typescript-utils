@@ -142,8 +142,11 @@ export function pipe<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
 ): T9;
 
 export function pipe(
-  value: any,
-  ...fn: OperatorFunction<any, any>[]
-): OperatorFunction<any, any> {
-  return fn.reduce((acc, fn) => fn(acc), value);
+  value: unknown,
+  ...fn: OperatorFunction<unknown, unknown>[]
+): OperatorFunction<unknown, unknown> {
+  return fn.reduce((acc, fn) => fn(acc), value) as OperatorFunction<
+    unknown,
+    unknown
+  >;
 }
