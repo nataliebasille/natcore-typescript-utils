@@ -10,7 +10,7 @@ export type Result<S, E> = (
 ) & {
   map: <N>(fn: (value: S) => N) => Result<N, E>;
   flatMap: <N>(fn: (value: S) => Result<N, E>) => Result<N, E>;
-  match: <R>(matchers: { ok: (value: S) => R; error: (value: E) => R }) => R;
+  match: <KR, ER>(matchers: ResultMatchers<S, E, KR, ER>) => KR | ER;
 };
 
 export type Ok<S, E> = Extract<Result<S, E>, { type: 'ok' }>;
@@ -53,15 +53,15 @@ export const isResult = (value: unknown): value is Result<unknown, unknown> =>
   (value.type === 'ok' || value.type === 'error');
 
 export function map<S, N>(
-  fn: (value: S) => N
+  fn: (value: S) => N,
 ): <E>(result: Result<S, E>) => Result<N, E>;
 export function map<R extends Result<unknown, unknown>, N>(
   result: R,
-  fn: (value: Result_InferOK<R>) => N
+  fn: (value: Result_InferOK<R>) => N,
 ): Result<N, Result_InferError<R>>;
 export function map(
   resultOrFn: Result<unknown, unknown> | ((value: unknown) => unknown),
-  fn?: (value: unknown) => unknown
+  fn?: (value: unknown) => unknown,
 ) {
   if (typeof resultOrFn === 'function') {
     return (result: Result<unknown, unknown>) => map(result, resultOrFn);
@@ -74,21 +74,21 @@ export function map(
 }
 
 export function flatMap<S1, S2, E2>(
-  fn: (value: S1) => Result<S2, E2>
+  fn: (value: S1) => Result<S2, E2>,
 ): <E1>(result: Result<S1, E1>) => Result<S2, E1 | E2>;
 export function flatMap<
   R extends Result<unknown, unknown>,
-  N extends Result<unknown, unknown>
+  N extends Result<unknown, unknown>,
 >(
   result: R,
-  fn: (value: Result_InferOK<R>) => N
+  fn: (value: Result_InferOK<R>) => N,
 ): Result<Result_InferOK<N>, Result_InferError<R> | Result_InferError<N>>;
 
 export function flatMap(
   resultOrFn:
     | Result<unknown, unknown>
     | ((value: unknown) => Result<unknown, unknown>),
-  fn?: (value: unknown) => Result<unknown, unknown>
+  fn?: (value: unknown) => Result<unknown, unknown>,
 ) {
   if (typeof resultOrFn === 'function') {
     return (result: Result<unknown, unknown>) => flatMap(result, resultOrFn);
@@ -97,23 +97,23 @@ export function flatMap(
   return isOk(resultOrFn) ? fn!(resultOrFn.value) : resultOrFn;
 }
 
-type ResultMatchers<S, E, V> = {
-  ok: (value: S) => V;
-  error: (value: E) => V;
+type ResultMatchers<S, E, KV, EV> = {
+  ok: (value: S) => KV;
+  error: (value: E) => EV;
 };
 
-export function match<S, E, V>(
-  matchers: ResultMatchers<S, E, V>
-): (result: Result<S, E>) => V;
-export function match<V, R extends Result<unknown, unknown>>(
+export function match<S, E, KV, EV>(
+  matchers: ResultMatchers<S, E, KV, EV>,
+): (result: Result<S, E>) => KV | EV;
+export function match<R extends Result<unknown, unknown>, KV, EV>(
   result: R,
-  matchers: ResultMatchers<Result_InferOK<R>, Result_InferError<R>, V>
-): V;
+  matchers: ResultMatchers<Result_InferOK<R>, Result_InferError<R>, KV, EV>,
+): KV | EV;
 export function match(
   resultOrMatchers:
     | Result<unknown, unknown>
-    | ResultMatchers<unknown, unknown, unknown>,
-  matchers?: ResultMatchers<unknown, unknown, unknown>
+    | ResultMatchers<unknown, unknown, unknown, unknown>,
+  matchers?: ResultMatchers<unknown, unknown, unknown, unknown>,
 ) {
   if ('ok' in resultOrMatchers) {
     return (result: Result<unknown, unknown>) =>
@@ -132,7 +132,7 @@ function createResult<S, E>(type: 'ok' | 'error', value: S | E): Result<S, E> {
     map: <N>(fn: (value: S) => N) => map(fn)(createResult(type, value)),
     flatMap: <N>(fn: (value: S) => Result<N, E>) =>
       flatMap(fn)(createResult(type, value)),
-    match: <V>(matchers: ResultMatchers<S, E, V>) =>
+    match: <KV, EV>(matchers: ResultMatchers<S, E, KV, EV>) =>
       match(matchers)(createResult(type, value)),
   } as Result<S, E>;
 }
