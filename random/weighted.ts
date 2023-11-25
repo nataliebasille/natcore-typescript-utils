@@ -1,4 +1,4 @@
-import { RandomNumberGenerator } from "./types";
+import { RandomNumberGenerator } from './types';
 
 /**
  * Returns a random index based on the weights provided.
@@ -8,7 +8,7 @@ import { RandomNumberGenerator } from "./types";
  */
 export function weighted(
   rng: RandomNumberGenerator,
-  weights: number[]
+  weights: number[],
 ): number {
   const total = weights.reduce((a, b) => a + b, 0);
   const random = rng() * total;

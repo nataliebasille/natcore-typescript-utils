@@ -1,4 +1,4 @@
-import { RandomNumberGenerator } from "./types";
+import { RandomNumberGenerator } from './types';
 
 export type GetInteger = {
   /**
@@ -21,7 +21,7 @@ export type GetInteger = {
 export const getInteger: GetInteger = (
   rng: RandomNumberGenerator,
   maxOrMin: number,
-  possibleMax?: number
+  possibleMax?: number,
 ): number => {
   const max = possibleMax === undefined ? maxOrMin : possibleMax;
   const min = possibleMax === undefined ? 0 : maxOrMin;
