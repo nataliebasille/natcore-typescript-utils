@@ -15,12 +15,6 @@ import { error, ok } from './result';
 
 describe('maybe', () => {
   describe('map', () => {
-    it('can chain map', () => {
-      const maybe = some('test').map((value) => value.length);
-      expect(maybe).toEqual(some(4));
-      expectTypeOf(some(4)).toMatchTypeOf(maybe);
-    });
-
     it('can map through pipe', () => {
       const maybe = pipe(
         some('test'),
@@ -38,12 +32,6 @@ describe('maybe', () => {
   });
 
   describe('flatMap', () => {
-    it('can chain flatMap', () => {
-      const maybe = some('test').flatMap((value) => some(value.length));
-      expect(maybe).toEqual(some(4));
-      expectTypeOf(some(4)).toMatchTypeOf(maybe);
-    });
-
     it('can flatMap through pipe', () => {
       const maybe = pipe(
         some('test'),
@@ -64,7 +52,7 @@ describe('maybe', () => {
   describe('match', () => {
     it('can match Some', () => {
       const noneFn = jest.fn(() => 0);
-      const result = some('test').match({
+      const result = match(some('test'), {
         some: (value) => value.length,
         none: noneFn,
       });
@@ -123,7 +111,7 @@ describe('maybe', () => {
   });
 
   it('can return Result from match', () => {
-    const output = some('test').match({
+    const output = match(some('test'), {
       some: (value) => ok(value.length),
       none: () => error('some error'),
     });

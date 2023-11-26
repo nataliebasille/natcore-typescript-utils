@@ -7,11 +7,7 @@ export type Result<S, E> = (
       readonly type: 'error';
       readonly value: E;
     }
-) & {
-  map: <N>(fn: (value: S) => N) => Result<N, E>;
-  flatMap: <N>(fn: (value: S) => Result<N, E>) => Result<N, E>;
-  match: <KR, ER>(matchers: ResultMatchers<S, E, KR, ER>) => KR | ER;
-};
+) & { readonly _generic?: [S, E] };
 
 export type Ok<S, E> = Extract<Result<S, E>, { type: 'ok' }>;
 export type Error<S, E> = Extract<Result<S, E>, { type: 'error' }>;
@@ -36,8 +32,13 @@ export type Result_InferError<R extends Result<unknown, unknown>> =
     ? E
     : never;
 
-export const ok = <S>(value: S) => createResult<S, never>('ok', value);
-export const error = <E>(value: E) => createResult<never, E>('error', value);
+export function ok<S, E = unknown>(value: S) {
+  return createResult<S, E>({ type: 'ok', value });
+}
+
+export function error<S, E>(value: E) {
+  return createResult<S, E>({ type: 'error', value });
+}
 
 export const isOk = <S, E>(result: Result<S, E>): result is Ok<S, E> =>
   result.type === 'ok';
@@ -51,6 +52,30 @@ export const isResult = (value: unknown): value is Result<unknown, unknown> =>
   'type' in value &&
   'value' in value &&
   (value.type === 'ok' || value.type === 'error');
+
+export function from<R extends Result<unknown, unknown>>(): {
+  ok: (value: Result_InferOK<R>) => Ok<Result_InferOK<R>, Result_InferError<R>>;
+  error: (
+    value: Result_InferError<R>,
+  ) => Error<Result_InferOK<R>, Result_InferError<R>>;
+};
+export function from<R extends Result<unknown, unknown>>(
+  prev: R,
+): {
+  ok: <S>(value: S) => Ok<S, Result_InferError<R>>;
+  error: <E>(value: E) => Error<Result_InferOK<R>, E>;
+};
+export function from<S, E>(): {
+  ok: (value: S) => Ok<S, E>;
+  error: (value: E) => Error<S, E>;
+};
+
+export function from() {
+  return {
+    ok: (value: unknown) => ok(value),
+    error: (value: unknown) => error(value),
+  };
+}
 
 export function map<S, N>(
   fn: (value: S) => N,
@@ -125,14 +150,22 @@ export function match(
     : matchers!.error(resultOrMatchers.value);
 }
 
-function createResult<S, E>(type: 'ok' | 'error', value: S | E): Result<S, E> {
-  return {
+function createResult<S, E>({
+  type,
+  value,
+}:
+  | {
+      type: 'ok';
+      value: S;
+    }
+  | {
+      type: 'error';
+      value: E;
+    }): Result<S, E> {
+  const result = {
     type,
     value,
-    map: <N>(fn: (value: S) => N) => map(fn)(createResult(type, value)),
-    flatMap: <N>(fn: (value: S) => Result<N, E>) =>
-      flatMap(fn)(createResult(type, value)),
-    match: <KV, EV>(matchers: ResultMatchers<S, E, KV, EV>) =>
-      match(matchers)(createResult(type, value)),
   } as Result<S, E>;
+
+  return result;
 }
