@@ -98,9 +98,14 @@ export function map(
   >;
 }
 
-export function flatMap<S1, S2, E2>(
-  fn: (value: S1) => Result<S2, E2>,
-): <E1>(result: Result<S1, E1>) => Result<S2, E1 | E2>;
+export function flatMap<
+  R1 extends Result<unknown, unknown>,
+  R2 extends Result<unknown, unknown>,
+>(
+  fn: (value: Result_InferOK<R1>) => R2,
+): (
+  result: R1,
+) => Result<Result_InferOK<R2>, Result_InferError<R1> | Result_InferError<R2>>;
 export function flatMap<
   R extends Result<unknown, unknown>,
   N extends Result<unknown, unknown>,
