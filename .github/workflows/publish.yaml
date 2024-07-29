@@ -1,0 +1,58 @@
+name: build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set env
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "RELEASE_VERSION=$(gh release list --repo https://github.com/${{ github.repository }} --limit 3 | grep -o 'v.*' | sort -r | awk 'NR==1  {print $3}' | sed 's/^v//g; s/[^0-9\.]//g')" >> $GITHUB_ENV
+
+      - name: Debug
+        run: |
+          echo "Release version: ${{env.RELEASE_VERSION}}"
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@vitoraguila'
+
+      - name: Create release branch 
+        run: |
+          git checkout -b release/${{env.RELEASE_VERSION}}
+
+      - name: Install dependencies
+        run: yarn && yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Patch version
+        run: |
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email "github-actions@github.com"
+          git remote add publisher "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          echo "Release version: ${{env.RELEASE_VERSION}}"
+
+          yarn config set version-git-tag false
+          yarn version --new-version ${{env.RELEASE_VERSION}}
+
+          git commit package.json -m "Updated package.json version to version released ${{env.RELEASE_VERSION}}"
+          git push publisher HEAD:release/v${{env.RELEASE_VERSION}}
+
+      - name: Publish
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
