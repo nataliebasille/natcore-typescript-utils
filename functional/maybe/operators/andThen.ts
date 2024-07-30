@@ -1,5 +1,5 @@
-import { isSome } from '../../maybe';
 import { type Maybe, type Maybe_InferSome, type Maybe_None } from '../types';
+import { isSome } from './isSome';
 
 type Maybe_AndThenInferNextResult<
   In extends Maybe<unknown>,

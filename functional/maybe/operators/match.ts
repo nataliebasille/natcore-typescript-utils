@@ -1,10 +1,10 @@
-import { isSome } from '../../maybe';
 import {
   type Maybe_None,
   type Maybe,
   type Maybe_Some,
   type Maybe_InferSome,
 } from '../types';
+import { isSome } from './isSome';
 
 type MaybeMatchers<In extends Maybe<unknown>, S, N> = {
   some: (value: Maybe_InferSome<In>) => S;

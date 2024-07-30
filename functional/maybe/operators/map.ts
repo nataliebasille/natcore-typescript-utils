@@ -1,4 +1,3 @@
-import { isSome } from '../../maybe';
 import { some } from '../factories';
 import {
   type Maybe_None,
@@ -6,6 +5,7 @@ import {
   type Maybe,
   type Maybe_InferSome,
 } from '../types';
+import { isSome } from './isSome';
 
 type Maybe_MapInferNextResult<M extends Maybe<unknown>, O> = [M] extends [
   Maybe_Some<unknown>,
