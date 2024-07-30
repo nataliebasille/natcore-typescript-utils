@@ -1,5 +1,5 @@
 {
-  "name": "@nataliebasille/typescript-utils",
+  "name": "@natcore/typescript-utils",
   "version": "1.0.17",
   "description": "Common coding needs written in typescript",
   "exports": {
