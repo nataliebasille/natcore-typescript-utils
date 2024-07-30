@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Returns a type where the elements of `TTuple` that are in `TPartial`
  * and in the same order are removed.
@@ -7,7 +8,7 @@
  */
 export type CullTuple<
   TTuple extends any[],
-  TPartial extends any[]
+  TPartial extends any[],
 > = TTuple extends [infer THead, ...infer TTail]
   ? TPartial extends [THead, ...infer TPartialTail]
     ? CullTuple<TTail, TPartialTail>
