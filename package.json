@@ -2,9 +2,33 @@
   "name": "@natcore/typescript-utils",
   "version": "1.0.17",
   "description": "Common coding needs written in typescript",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "exports": {
+    "./functional/maybe": {
+      "import": "./dist/functional/maybe/index.js",
+      "require": "./dist/functional/maybe/index.cjs",
+      "types": "./dist/functional/maybe/index.d.ts"
+    },
+    "./functional/result": {
+      "import": "./dist/functional/result/index.js",
+      "require": "./dist/functional/result/index.cjs",
+      "types": "./dist/functional/result/index.d.ts"
+    },
+    "./functional": {
+      "import": "./dist/functional/index.js",
+      "require": "./dist/functional/index.cjs",
+      "types": "./dist/functional/index.d.ts"
+    },
+    "./random": {
+      "import": "./dist/random/index.js",
+      "require": "./dist/random/index.cjs",
+      "types": "./dist/random/index.d.ts"
+    },
+    "./range": {
+      "import": "./dist/range/index.js",
+      "require": "./dist/range/index.cjs",
+      "types": "./dist/range/index.d.ts"
+    }
+  },
   "type": "module",
   "scripts": {
     "build": "npx tsup --dts",
