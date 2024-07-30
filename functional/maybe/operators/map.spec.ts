@@ -7,7 +7,7 @@ import { type Maybe_None, type Maybe_Some } from '../types';
 describe('map', () => {
   describe('non-pipeable version', () => {
     it('if input is some, it remaps the value with fn', () => {
-      const maybe = some('test');
+      const maybe = some(1);
       const mapped = map(maybe, (value) => value + 1);
       expect(mapped).toEqual(some(2));
     });
@@ -55,7 +55,7 @@ describe('map', () => {
 
   describe('pipeable version', () => {
     it('if input is some, it remaps the value with fn', () => {
-      const maybe = some('test');
+      const maybe = some(1);
       const mapped = pipe(
         maybe,
         map((value) => value + 1),
