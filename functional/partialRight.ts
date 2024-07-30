@@ -1,4 +1,5 @@
-import type { CullTuple } from "./types";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { CullTuple } from './types';
 
 type PartialParametersRight<TFn extends (...args: any[]) => any> =
   Parameters<TFn> extends infer TParams
@@ -9,7 +10,7 @@ type PartialParametersRight<TFn extends (...args: any[]) => any> =
 
 type RemovedParametersRight<
   TFn extends (...args: any[]) => any,
-  TPartialArgs extends PartialParametersRight<TFn>
+  TPartialArgs extends PartialParametersRight<TFn>,
 > = CullTuple<Parameters<TFn>, TPartialArgs>;
 
 /**
@@ -21,7 +22,7 @@ type RemovedParametersRight<
  */
 export const partialRight = <
   TFn extends (...args: any[]) => any,
-  TPartialArgs extends PartialParametersRight<TFn>
+  TPartialArgs extends PartialParametersRight<TFn>,
 >(
   fn: TFn,
   ...args: TPartialArgs

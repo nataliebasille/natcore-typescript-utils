@@ -1,4 +1,4 @@
-import { RandomNumberGenerator } from './types';
+import { type RandomNumberGenerator } from './types';
 
 export type GetInteger = {
   /**

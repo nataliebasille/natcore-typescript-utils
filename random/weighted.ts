@@ -1,4 +1,4 @@
-import { RandomNumberGenerator } from './types';
+import { type RandomNumberGenerator } from './types';
 
 /**
  * Returns a random index based on the weights provided.
