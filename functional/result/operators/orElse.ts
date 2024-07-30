@@ -1,9 +1,9 @@
 import {
-  Result,
-  Result_Error,
-  Result_InferError,
-  Result_InferOK,
-  Result_Ok,
+  type Result,
+  type Result_Error,
+  type Result_InferError,
+  type Result_InferOK,
+  type Result_Ok,
 } from '../types';
 import { isOk } from './isOk';
 
@@ -18,16 +18,7 @@ type OrElseInferNextResult<
   ? Result_Ok<Result_InferOK<N> | Result_InferOK<R>>
   : [N] extends [Result_Error<unknown>]
   ? Result<Result_InferOK<R>, Result_InferError<N>>
-  : Result<Result_InferOK<R>, Result_InferError<R> | Result_InferError<N>>;
-
-type X = OrElseInferNextResult<
-  | Result_Ok<number>
-  | Result_Error<{
-      code: 1;
-      message: string;
-    }>,
-  Result_Ok<string>
->;
+  : Result<Result_InferOK<R> | Result_InferOK<N>, Result_InferError<N>>;
 
 export function orElse<
   R extends Result<unknown, unknown>,

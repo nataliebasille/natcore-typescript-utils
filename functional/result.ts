@@ -1,7 +1,3 @@
-export const isError = <R extends Result<unknown, unknown>>(
-  result: R,
-): result is Extract<R, Result_Error<unknown>> => result.type === 'error';
-
 export const isResult = (value: unknown): value is Result<unknown, unknown> =>
   typeof value === 'object' &&
   value !== null &&
@@ -28,34 +24,6 @@ export function map(
     unknown,
     unknown
   >;
-}
-
-export function andThen<
-  R1 extends Result<unknown, unknown>,
-  R2 extends Result<unknown, unknown>,
->(
-  fn: (value: Result_InferOK<R1>) => R2,
-): (
-  result: R1,
-) => Result<Result_InferOK<R2>, Result_InferError<R1> | Result_InferError<R2>>;
-export function andThen<
-  R extends Result<unknown, unknown>,
-  N extends Result<unknown, unknown>,
->(
-  result: R,
-  fn: (value: Result_InferOK<R>) => N,
-): Result<Result_InferOK<N>, Result_InferError<R> | Result_InferError<N>>;
-export function andThen(
-  resultOrFn:
-    | Result<unknown, unknown>
-    | ((value: unknown) => Result<unknown, unknown>),
-  fn?: (value: unknown) => Result<unknown, unknown>,
-) {
-  if (typeof resultOrFn === 'function') {
-    return (result: Result<unknown, unknown>) => andThen(result, resultOrFn);
-  }
-
-  return isOk(resultOrFn) ? fn!(resultOrFn.value) : resultOrFn;
 }
 
 type ResultMatchers<S, E, KV, EV> = {

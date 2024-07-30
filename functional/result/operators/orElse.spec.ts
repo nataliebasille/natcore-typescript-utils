@@ -1,7 +1,7 @@
 import { expectTypeOf } from 'expect-type';
 import { orElse } from './orElse';
-import { error, ok } from '../result';
-import { Result, Result_Error, Result_Ok } from '../types';
+import { error, ok } from '../factories';
+import { type Result, type Result_Error, type Result_Ok } from '../types';
 import { pipe } from '../../pipe';
 
 describe('result.orElse', () => {
@@ -127,7 +127,7 @@ describe('result.orElse', () => {
         >();
       });
 
-      it('for ambiguous result as input and ambiguous result as return type, it infers an ambiguous result with ok type from input and the error type as a union of the two error types', () => {
+      it('for ambiguous result as input and ambiguous result as return type, it infers an ambiguous result with ok as union of the two types and the error type from the output', () => {
         const result = ok(1) as Result<number, { code: 1; message: string }>;
         const output = orElse(result, () => {
           return ok('a different result') as Result<
@@ -136,10 +136,7 @@ describe('result.orElse', () => {
           >;
         });
         expectTypeOf(output).toEqualTypeOf<
-          Result<
-            number,
-            { code: 1; message: string } | { code: 2; message: string }
-          >
+          Result<number | string, { code: 2; message: string }>
         >();
       });
     });
@@ -319,10 +316,7 @@ describe('result.orElse', () => {
           }),
         );
         expectTypeOf(output).toEqualTypeOf<
-          Result<
-            number,
-            { code: 1; message: string } | { code: 2; message: string }
-          >
+          Result<number | string, { code: 2; message: string }>
         >();
       });
     });

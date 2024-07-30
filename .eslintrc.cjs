@@ -16,5 +16,9 @@ module.exports = {
     indent: ['error', 2],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
+    '@typescript-eslint/consistent-type-imports': ['error', {
+      prefer: 'type-imports',
+      fixStyle: 'inline-type-imports',
+    }],
   },
 };

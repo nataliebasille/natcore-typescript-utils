@@ -1,4 +1,4 @@
-import { Result, Result_Ok } from '../types';
+import { type Result, type Result_Ok } from '../types';
 
 export const isOk = <R extends Result<unknown, unknown>>(
   result: R,
