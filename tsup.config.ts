@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { defineConfig } from 'tsup';
-
+//minor change
 export default defineConfig({
   entry: [
     'src/functional/index.ts',
