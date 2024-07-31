@@ -3,11 +3,11 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: [
-    'functional/index.ts',
-    'functional/maybe/index.ts',
-    'functional/result/index.ts',
-    'random/index.ts',
-    'range/index.ts',
+    'src/functional/index.ts',
+    'src/functional/maybe/index.ts',
+    'src/functional/result/index.ts',
+    'src/random/index.ts',
+    'src/range/index.ts',
   ],
   external: [],
   format: ['esm', 'cjs'],
